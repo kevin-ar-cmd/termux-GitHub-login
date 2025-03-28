@@ -34,7 +34,7 @@ export PATH=\$PATH:\$ANDROID_HOME/platform-tools
 export USER="$custom_username"
 
 # Custom Prompt (with colors)
-export PS1="\\e[1;32m$custom_username@termux:\\e[1;34m\\w\\e[0m\$ "
+export PS1="\e[1;32m$custom_username@termux:\e[1;34m\w\e[0m\$ "
 
 # Start SSH-Agent and add SSH key
 eval \$(ssh-agent -s)
@@ -58,3 +58,7 @@ source "$BASHRC_FILE"
 # Confirm changes
 echo "Username changed successfully! Your new Termux prompt is:"
 echo "$custom_username@termux:~$"
+
+# Source the .bashrc file to apply changes
+echo "Applying changes..."
+source ~/.bashrc
