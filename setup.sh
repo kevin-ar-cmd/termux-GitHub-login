@@ -12,6 +12,11 @@ fi
 # Define the ~/.bashrc file path
 BASHRC_FILE="$HOME/.bashrc"
 
+# Create .bashrc file if it doesn't exist
+if [ ! -f "$BASHRC_FILE" ]; then
+    touch "$BASHRC_FILE"
+fi
+
 # Backup existing .bashrc file
 cp "$BASHRC_FILE" "$BASHRC_FILE.bak"
 
@@ -29,12 +34,23 @@ export PATH=\$PATH:\$ANDROID_HOME/platform-tools
 export USER="$custom_username"
 
 # Custom Prompt (with colors)
-export PS1="\e[1;32m$custom_username@termux:\e[1;34m\w\e[0m\$ "
+export PS1="\\e[1;32m$custom_username@termux:\\e[1;34m\\w\\e[0m\$ "
 
 # Start SSH-Agent and add SSH key
 eval \$(ssh-agent -s)
-ssh-add ~/.ssh/id_rsa
 EOF
+
+# Check if SSH key exists, if not generate one
+if [ ! -f ~/.ssh/id_rsa ]; then
+    echo "Generating SSH key..."
+    ssh-keygen -t rsa -b 4096 -C "$custom_username@termux"
+    echo "Copy the following SSH key and add it to your GitHub account:"
+    cat ~/.ssh/id_rsa.pub
+    echo "Go to https://github.com/settings/keys and add the SSH key."
+fi
+
+# Add SSH key to the agent
+ssh-add ~/.ssh/id_rsa
 
 # Apply changes
 source "$BASHRC_FILE"
